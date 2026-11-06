@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  # Entorno Codespaces donde editas código y usas la terminal
+  workspace:
+    image: mcr.microsoft.com/devcontainers/base:ubuntu
+    volumes:
+      - ..:/workspace:cached
+    command: sleep infinity
+
+  # RabbitMQ
+  middleware:
+    image: rabbitmq:4.4.0-management-alpine
+    container_name: middleware
+    hostname: container-host
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - COMPDISP5_RABBITMQ_DATA:/var/lib/rabbitmq
+
+  # PostgreSQL
+  database:
+    image: postgres:18.6-alpine3.24
+    container_name: database
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - COMPDISP5_DB_DATA:/var/lib/postgresql/data
+      - ../init-scripts/01-init.sql:/docker-entrypoint-initdb.d/init-scripts/01-init.sql:ro
+
+volumes:
+  COMPDISP5_RABBITMQ_DATA:
+  COMPDISP5_DB_DATA:

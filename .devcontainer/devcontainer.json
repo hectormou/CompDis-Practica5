@@ -1,0 +1,16 @@
+{
+  "name": "Entorno RabbitMQ y Postgres",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "workspace",
+  "workspaceFolder": "/workspace",
+  "forwardPorts": [15672, 5432],
+  "portsAttributes": {
+    "15672": {
+      "label": "RabbitMQ Web UI",
+      "onAutoForward": "openBrowser"
+    },
+    "5432": {
+      "label": "PostgreSQL"
+    }
+  }
+}
